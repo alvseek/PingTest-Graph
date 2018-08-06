@@ -91,15 +91,13 @@ namespace PingTest
                 {
                     removeSuccess = false;
                     MessageBox.Show("Failed to remove license from Windows Registry\n\nReason: Application has no permission to delete key", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    this.Close();
                 }
             }            
             if (removeSuccess)
             {
-                MessageBox.Show("License has been removed", "Information", MessageBoxButtons.OK, MessageBoxIcon.None);
-                
-                this.Close();
+                MessageBox.Show("License has been removed", "Information", MessageBoxButtons.OK, MessageBoxIcon.None);                               
             }
+            this.Close();
             openSettings.CheckLicense();
 
         }

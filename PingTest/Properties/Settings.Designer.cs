@@ -25,7 +25,7 @@ namespace PingTest.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
         public int WPosX {
             get {
                 return ((int)(this["WPosX"]));
@@ -37,7 +37,7 @@ namespace PingTest.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
         public int WPosY {
             get {
                 return ((int)(this["WPosY"]));

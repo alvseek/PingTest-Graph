@@ -77,9 +77,9 @@ namespace PingTest
         {
             InitializeComponent();
             LoadFormPosition();
-            CheckLicense();            
+            CheckLicense();
             MakeSeries();
-            needRestart = false;            
+            needRestart = false;
             ThreadPool.QueueUserWorkItem(async q => await SetupPingAsync(cts.Token));
         }
 
@@ -101,9 +101,21 @@ namespace PingTest
         {
             this.Opacity = (float)Properties.Settings.Default.Tranparency / 100;
             if (this.Opacity == 1 && !Properties.Settings.Default.Clickable) this.Opacity = (float)99 / 100;
-            this.Location = new Point(Properties.Settings.Default.WPosX, Properties.Settings.Default.WPosY);
+            if (Properties.Settings.Default.WPosX == -1 && Properties.Settings.Default.WPosY == -1)
+            {
+                MoveToCenterScreen();
+            }
+            else
+            {
+                this.Location = new Point(Properties.Settings.Default.WPosX, Properties.Settings.Default.WPosY);
+            }
             this.TopMost = Properties.Settings.Default.AlwaysOnTop;
             this.ShowInTaskbar = !this.TopMost;
+        }
+
+        private void MoveToCenterScreen()
+        {
+            this.Location = new Point((Screen.PrimaryScreen.Bounds.Width/2) + (this.Width), (Screen.PrimaryScreen.Bounds.Height/2) + (this.Height/2));
         }
 
         private void MakeSeries()
@@ -118,7 +130,7 @@ namespace PingTest
         }
 
         private async Task SetupPingAsync(CancellationToken ct)
-        {            
+        {
             while (!ct.IsCancellationRequested)
             {
                 reset = new CancellationTokenSource();
