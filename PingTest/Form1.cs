@@ -15,7 +15,7 @@ namespace PingTest
     {
         #region basic Form properties
 
-        #region click thru constant properties of win32.dll address
+        #region clickable constant properties of win32.dll address
         //Creates a layered window.
         private const int WS_EX_LAYERED = 0x80000;
 
