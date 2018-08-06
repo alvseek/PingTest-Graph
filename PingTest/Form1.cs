@@ -13,17 +13,19 @@ namespace PingTest
 {
     public partial class Form1 : Form
     {
-        public bool needRestart;
-        // thread ping waiter
-        public AutoResetEvent waiter = new AutoResetEvent(false);
+        #region basic Form properties
 
+        #region click thru constant properties of win32.dll address
         //Creates a layered window.
         private const int WS_EX_LAYERED = 0x80000;
 
         //Specifies that a window created with this style should not be painted until siblings beneath the window (that were created by the same thread) have been painted.
         //The window appears transparent because the bits of underlying sibling windows have already been painted.
         private const int WS_EX_TRANSPARENT = 0x20;
+        #endregion
 
+        // thread ping waiter
+        private AutoResetEvent waiter = new AutoResetEvent(false);
 
         // Invoking thread to set text
         delegate void SetTextCallback(string text);
@@ -32,7 +34,9 @@ namespace PingTest
         public CancellationTokenSource reset;
 
         Series newSeries = new Series();
+        #endregion
 
+        #region UI basic set up
         private bool mouseDown;
         private Point lastLocation;
 
@@ -71,7 +75,7 @@ namespace PingTest
                 return cp;
             }
         }
-
+        #endregion
 
         public Form1()
         {
@@ -79,31 +83,19 @@ namespace PingTest
             LoadFormPosition();
             CheckLicense();
             MakeSeries();
-            needRestart = false;
             ThreadPool.QueueUserWorkItem(async q => await SetupPingAsync(cts.Token));
         }
 
-        private void CheckLicense()
-        {
-            AppFunction appFunction = new AppFunction();
-            bool errorEx = false;
-            string licenseTitle = appFunction.CheckLicenseString(Properties.Settings.Default.LicenseCode);
-            if (licenseTitle == string.Empty) licenseTitle = appFunction.CheckLicense(AppFunction.LicenseType.Title, ref errorEx);
-
-            if (licenseTitle == string.Empty)
-            {
-                Donation donationForm = new Donation();
-                donationForm.Show();
-            }
-        }
-
+        #region initial setting
         private void LoadFormPosition()
         {
             this.Opacity = (float)Properties.Settings.Default.Tranparency / 100;
             if (this.Opacity == 1 && !Properties.Settings.Default.Clickable) this.Opacity = (float)99 / 100;
-            if (Properties.Settings.Default.WPosX == -1 && Properties.Settings.Default.WPosY == -1)
+            if (Properties.Settings.Default.WPosX == -1 && Properties.Settings.Default.WPosY == -1)                
             {
-                MoveToCenterScreen();
+                UIFunction uiFunction = new UIFunction();
+                uiFunction.MoveToDefault(this);
+                //belum di check bisa apa engga nya
             }
             else
             {
@@ -113,9 +105,18 @@ namespace PingTest
             this.ShowInTaskbar = !this.TopMost;
         }
 
-        private void MoveToCenterScreen()
+        private void CheckLicense()
         {
-            this.Location = new Point((Screen.PrimaryScreen.Bounds.Width/2) + (this.Width), (Screen.PrimaryScreen.Bounds.Height/2) + (this.Height/2));
+            AppFunction appFunction = new AppFunction();
+            bool errorEx;
+            string licenseTitle = appFunction.CheckLicenseString(Properties.Settings.Default.LicenseCode);
+            if (licenseTitle == string.Empty) licenseTitle = appFunction.CheckLicense(AppFunction.LicenseType.Title, out errorEx);
+
+            if (licenseTitle == string.Empty)
+            {
+                Donation donationForm = new Donation();
+                donationForm.Show();
+            }
         }
 
         private void MakeSeries()
@@ -128,6 +129,7 @@ namespace PingTest
             newSeries.MarkerStyle = MarkerStyle.Circle;
             newSeries.MarkerSize = 0;
         }
+        #endregion
 
         private async Task SetupPingAsync(CancellationToken ct)
         {
@@ -301,6 +303,7 @@ namespace PingTest
             PingChart.ChartAreas[0].AxisY.LabelStyle.Interval = axisInterval;
         }
 
+        #region ToolStrip function
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -319,6 +322,63 @@ namespace PingTest
                 openFormSettings.Focus();
             }
         }
+
+        #region Position Tool Strip Menu Function
+        private void resetToCenterToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            UIFunction uiFunction = new UIFunction();
+            uiFunction.MovePosition(this, UIFunction.UIPosition.Center);
+        }
+
+        private void toTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UIFunction uiFunction = new UIFunction();
+            uiFunction.MovePosition(this, UIFunction.UIPosition.Top);
+        }
+
+        private void toTopRightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UIFunction uiFunction = new UIFunction();
+            uiFunction.MovePosition(this, UIFunction.UIPosition.TopRight);
+        }
+
+        private void toRightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UIFunction uiFunction = new UIFunction();
+            uiFunction.MovePosition(this, UIFunction.UIPosition.Right);
+        }
+
+        private void toBottomRightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UIFunction uiFunction = new UIFunction();
+            uiFunction.MovePosition(this, UIFunction.UIPosition.BottomRight);
+        }
+
+        private void toBottomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UIFunction uiFunction = new UIFunction();
+            uiFunction.MovePosition(this, UIFunction.UIPosition.Bottom);
+        }
+
+        private void toBottomLeftToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UIFunction uiFunction = new UIFunction();
+            uiFunction.MovePosition(this, UIFunction.UIPosition.BottomLeft);
+        }
+
+        private void toLeftToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UIFunction uiFunction = new UIFunction();
+            uiFunction.MovePosition(this, UIFunction.UIPosition.Left);
+        }
+
+        private void toTopLeftToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UIFunction uiFunction = new UIFunction();
+            uiFunction.MovePosition(this, UIFunction.UIPosition.TopLeft);
+        }
+        #endregion
+        #endregion
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {

@@ -14,9 +14,7 @@ namespace PingTest
     {
         Settings openSettings;
         AppFunction appFunction = new AppFunction();
-        string initialLicenseCode = string.Empty;
-        bool errorEx = false;
-
+        string initialLicenseCode = string.Empty;       
         public License(Settings settingsRef)
         {
             openSettings = settingsRef;
@@ -25,7 +23,8 @@ namespace PingTest
             initialLicenseCode = Properties.Settings.Default.LicenseCode;           
             if (initialLicenseCode == string.Empty)
             {
-                initialLicenseCode = appFunction.CheckLicense(AppFunction.LicenseType.Value, ref errorEx); ;
+                bool errorEx;
+                initialLicenseCode = appFunction.CheckLicense(AppFunction.LicenseType.Value, out errorEx); ;
             }
             
             if (initialLicenseCode != string.Empty)
@@ -44,8 +43,9 @@ namespace PingTest
                 {
                     MessageBox.Show("You're now using the " + license + " License!", "License changed", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     openSettings.licenseLabel.Text = license + " License";
-                    appFunction.CreateLicenseKey(licenseTxtBox.Text, ref errorEx);
-                    if (errorEx)
+                    bool errorCreatingRegistry;
+                    appFunction.CreateLicenseKey(licenseTxtBox.Text, out errorCreatingRegistry);
+                    if (errorCreatingRegistry)
                     {
                         MessageBox.Show("Please note:\n\nBecause the application cannot write to Windows Current Registry, the license code will be stored locally", "Note", MessageBoxButtons.OK, MessageBoxIcon.None);
                         Properties.Settings.Default.LicenseCode = licenseTxtBox.Text;
@@ -78,21 +78,25 @@ namespace PingTest
         }
 
         private void removeLicenseButton_Click(object sender, EventArgs e)
-        {
-            bool removeSuccess = true;
+        {            
             Properties.Settings.Default.LicenseCode = string.Empty;
             Properties.Settings.Default.Save();
+            bool removeSuccess = true;
+
             AppFunction appFunction = new AppFunction();
-            string licenseValue = appFunction.CheckLicense(AppFunction.LicenseType.Value, ref errorEx); ;
-            if (!errorEx && licenseValue != string.Empty)
+            bool errorAccess;
+            string licenseValue = appFunction.CheckLicense(AppFunction.LicenseType.Value, out errorAccess); ;
+            if (!errorAccess && licenseValue != string.Empty)
             {
-                appFunction.DeleteLicenseKey(ref errorEx);
-                if (errorEx)
+                bool errorDeletingKey;
+                appFunction.DeleteLicenseKey(out errorDeletingKey);
+                if (errorDeletingKey)
                 {
                     removeSuccess = false;
-                    MessageBox.Show("Failed to remove license from Windows Registry\n\nReason: Application has no permission to delete key", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to remove license from Windows Registry\n\nReason: The application has no permission to delete Registry key", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }            
+            }   
+                     
             if (removeSuccess)
             {
                 MessageBox.Show("License has been removed", "Information", MessageBoxButtons.OK, MessageBoxIcon.None);                               

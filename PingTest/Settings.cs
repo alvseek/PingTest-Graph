@@ -49,7 +49,7 @@ namespace PingTest
             public string Value { get; set; }
         }
 
-        #region win32 on the fly unclickable function
+        #region win32 on the fly clickable function
         internal static class NativeMethods
         {
             [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
@@ -89,9 +89,9 @@ namespace PingTest
         #endregion
 
         public Settings(Form1 form1Ref)
-        {
-            openForm1 = form1Ref;
+        {            
             InitializeComponent();
+            openForm1 = form1Ref;
             this.AcceptButton = okButton;
             transparencyTrackBar.Value = Properties.Settings.Default.Tranparency;
             CheckLicense();
@@ -101,12 +101,13 @@ namespace PingTest
             CheckClickable();
         }
 
+        #region Initial Load Settings
         public void CheckLicense()
         {
             AppFunction appFunction = new AppFunction();
-            bool errorEx = false;
+            bool errorAccess;
             string licenseTitle = appFunction.CheckLicenseString(Properties.Settings.Default.LicenseCode);
-            if (licenseTitle == string.Empty) licenseTitle = appFunction.CheckLicense(AppFunction.LicenseType.Title, ref errorEx);
+            if (licenseTitle == string.Empty) licenseTitle = appFunction.CheckLicense(AppFunction.LicenseType.Title, out errorAccess);
 
             if (licenseTitle != string.Empty)
             {
@@ -118,7 +119,6 @@ namespace PingTest
             }
         }
 
-        #region Initial Load Settings
         private void LoadIPAddress()
         {
             ipAddressComboBox.DataSource = new ComboItem[]
@@ -189,8 +189,7 @@ namespace PingTest
             {
                 SetStartup(this.startupChkBox.Checked);
                 //if 100 set the transparency to 99 first then make unclickable
-                SetTransparency();
-                SetClickable();
+                SetTransparencyAndClickable();
                 SetTopMost();
                 bool ipChanged = false;
                 if (newIpAddress != usedIpAddress)
@@ -258,17 +257,10 @@ namespace PingTest
             }
         }
 
-        private void SetTopMost()
+        private void SetTransparencyAndClickable()
         {
-            if (openForm1.TopMost != this.alwaysOnTopChkBox.Checked)
-            {
-                openForm1.Hide();
-                openForm1.TopMost = this.alwaysOnTopChkBox.Checked;
-                openForm1.ShowInTaskbar = !openForm1.TopMost;
-                openForm1.Show();
-                Properties.Settings.Default.AlwaysOnTop = openForm1.TopMost;
-                Properties.Settings.Default.Save();
-            }
+            SetTransparency();
+            SetClickable();
         }
 
         private void SetTransparency()
@@ -308,7 +300,18 @@ namespace PingTest
             }
         }
 
-
+        private void SetTopMost()
+        {
+            if (openForm1.TopMost != this.alwaysOnTopChkBox.Checked)
+            {
+                openForm1.Hide();
+                openForm1.TopMost = this.alwaysOnTopChkBox.Checked;
+                openForm1.ShowInTaskbar = !openForm1.TopMost;
+                openForm1.Show();
+                Properties.Settings.Default.AlwaysOnTop = openForm1.TopMost;
+                Properties.Settings.Default.Save();
+            }
+        }
         #endregion
 
         #region Manual Input IP Address validation
@@ -463,6 +466,8 @@ namespace PingTest
         }
         #endregion
 
+        #region transparency realtime update
+        //update transparency while changing the trackbar, if user cancel the settings then cancel the transparency
         private void transparencyTrackBar_ValueChanged(object sender, EventArgs e)
         {
             int moreThanHalf = 0;
@@ -476,6 +481,7 @@ namespace PingTest
             }
         }
 
+        //cancel transparency
         private void Settings_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
@@ -486,7 +492,9 @@ namespace PingTest
                 }
             }
         }
+        #endregion
 
+        //enter license code
         private void licenseLabel_Click(object sender, EventArgs e)
         {
             License licenseForm = new License(this);
@@ -494,14 +502,16 @@ namespace PingTest
             licenseForm.Dispose();
         }
 
+        //information to make unclickable
         private void clickableChkBox_CheckedChanged(object sender, EventArgs e)
         {
             if (clickableChkBox.Checked == false)
             {
-                MessageBox.Show("You can make it clickable again from the tray icon", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You can make it clickable again from the tray/notification icon", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
+        //esc key to cancel
         protected override bool ProcessDialogKey(Keys keyData)
         {
             if (Form.ModifierKeys == Keys.None && keyData == Keys.Escape)
@@ -513,6 +523,7 @@ namespace PingTest
             return base.ProcessDialogKey(keyData);
         }
 
+        #region cant read registry for startup tooltip
         private void registryErrorLabel_MouseHover(object sender, EventArgs e)
         {
             string registryErrorString = "\nYou need to give the application a permission to read and write the Windows Current User Registry.";
@@ -524,5 +535,7 @@ namespace PingTest
         {
             errorRegistryToolTip.Hide(registryErrorLabel);
         }
+        #endregion
+
     }
 }
