@@ -80,6 +80,7 @@ namespace PingTest
         public Form1()
         {
             InitializeComponent();
+            this.Icon = Properties.Resources.logo_icon_complete;
             LoadFormPosition();
             CheckLicense();
             MakeSeries();

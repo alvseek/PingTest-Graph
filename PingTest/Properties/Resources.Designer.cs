@@ -63,6 +63,16 @@ namespace PingTest.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon logo_icon_complete {
+            get {
+                object obj = ResourceManager.GetObject("logo_icon_complete", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon logo_micro_green {
             get {
                 object obj = ResourceManager.GetObject("logo_micro_green", resourceCulture);

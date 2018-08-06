@@ -91,8 +91,9 @@ namespace PingTest
         public Settings(Form1 form1Ref)
         {            
             InitializeComponent();
-            openForm1 = form1Ref;
             this.AcceptButton = okButton;
+            this.Icon = Properties.Resources.logo_icon_complete;
+            openForm1 = form1Ref;
             transparencyTrackBar.Value = Properties.Settings.Default.Tranparency;
             CheckLicense();
             LoadIPAddress();

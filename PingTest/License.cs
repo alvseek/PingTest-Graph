@@ -20,6 +20,7 @@ namespace PingTest
             openSettings = settingsRef;
             InitializeComponent();
             this.AcceptButton = okButton;
+            this.Icon = Properties.Resources.logo_icon_complete;
             initialLicenseCode = Properties.Settings.Default.LicenseCode;           
             if (initialLicenseCode == string.Empty)
             {

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.networkBox = new System.Windows.Forms.GroupBox();
             this.ipAddressComboBox = new System.Windows.Forms.ComboBox();
             this.ipLabel = new System.Windows.Forms.Label();
@@ -41,6 +40,7 @@
             this.textAddress3 = new System.Windows.Forms.TextBox();
             this.textAddress4 = new System.Windows.Forms.TextBox();
             this.appBox = new System.Windows.Forms.GroupBox();
+            this.registryErrorLabel = new System.Windows.Forms.Label();
             this.clickableLabel = new System.Windows.Forms.Label();
             this.clickableChkBox = new System.Windows.Forms.CheckBox();
             this.alwaysOnTopLabel = new System.Windows.Forms.Label();
@@ -55,7 +55,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.licenseLabel = new System.Windows.Forms.Label();
-            this.registryErrorLabel = new System.Windows.Forms.Label();
             this.networkBox.SuspendLayout();
             this.panel1.SuspendLayout();
             this.appBox.SuspendLayout();
@@ -221,6 +220,20 @@
             this.appBox.TabStop = false;
             this.appBox.Text = "Application Settings";
             // 
+            // registryErrorLabel
+            // 
+            this.registryErrorLabel.AutoSize = true;
+            this.registryErrorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.registryErrorLabel.ForeColor = System.Drawing.Color.Red;
+            this.registryErrorLabel.Location = new System.Drawing.Point(187, 31);
+            this.registryErrorLabel.Name = "registryErrorLabel";
+            this.registryErrorLabel.Size = new System.Drawing.Size(117, 13);
+            this.registryErrorLabel.TabIndex = 5;
+            this.registryErrorLabel.Text = "* cannot read registry! *";
+            this.registryErrorLabel.Visible = false;
+            this.registryErrorLabel.MouseLeave += new System.EventHandler(this.registryErrorLabel_MouseLeave);
+            this.registryErrorLabel.MouseHover += new System.EventHandler(this.registryErrorLabel_MouseHover);
+            // 
             // clickableLabel
             // 
             this.clickableLabel.AutoSize = true;
@@ -373,20 +386,6 @@
             this.licenseLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.licenseLabel.Click += new System.EventHandler(this.licenseLabel_Click);
             // 
-            // registryErrorLabel
-            // 
-            this.registryErrorLabel.AutoSize = true;
-            this.registryErrorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.registryErrorLabel.ForeColor = System.Drawing.Color.Red;
-            this.registryErrorLabel.Location = new System.Drawing.Point(187, 31);
-            this.registryErrorLabel.Name = "registryErrorLabel";
-            this.registryErrorLabel.Size = new System.Drawing.Size(117, 13);
-            this.registryErrorLabel.TabIndex = 5;
-            this.registryErrorLabel.Text = "* cannot read registry! *";
-            this.registryErrorLabel.Visible = false;
-            this.registryErrorLabel.MouseLeave += new System.EventHandler(this.registryErrorLabel_MouseLeave);
-            this.registryErrorLabel.MouseHover += new System.EventHandler(this.registryErrorLabel_MouseHover);
-            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -401,7 +400,6 @@
             this.Controls.Add(this.appBox);
             this.Controls.Add(this.networkBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.MaximizeBox = false;
             this.MinimizeBox = false;

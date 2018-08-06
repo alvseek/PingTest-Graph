@@ -15,6 +15,7 @@ namespace PingTest
         public Donation()
         {
             InitializeComponent();
+            this.Icon = Properties.Resources.logo_icon_complete;
         }
 
         private void button1_Click(object sender, EventArgs e)
