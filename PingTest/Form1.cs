@@ -246,20 +246,29 @@ namespace PingTest
 
                     newSeries.Points.AddXY(DateTime.Now, pingTime);
 
-                    if (pingTime <= 300)
+                    if (pingTime < 100)
                     {
                         this.PingLabel.ForeColor = Color.White;
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.White;
+                        notifyIcon.Icon = Properties.Resources.logo_micro_green;
+                    }
+                    else if (pingTime >= 100 && pingTime < 300)
+                    {
+                        this.PingLabel.ForeColor = Color.Yellow;
+                        this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Yellow;
+                        notifyIcon.Icon = Properties.Resources.logo_micro_yellow;
                     }
                     else if (pingTime >= 300 && pingTime < 1000)
                     {
                         this.PingLabel.ForeColor = Color.Orange;
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Orange;
+                        notifyIcon.Icon = Properties.Resources.logo_micro_orange;
                     }
                     else
                     {
                         this.PingLabel.ForeColor = Color.Red;
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Red;
+                        notifyIcon.Icon = Properties.Resources.logo_micro_red;
                     }
 
                     this.PingLabel.Text += " ms";
@@ -280,6 +289,7 @@ namespace PingTest
                         newSeries.Points.AddXY(DateTime.Now, 0);
                     }
                     this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Purple;
+                    notifyIcon.Icon = Properties.Resources.logo_micro_purple;
                     RedrawGraph();
                 }
             }

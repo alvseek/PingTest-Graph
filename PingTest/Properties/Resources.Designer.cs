@@ -59,5 +59,65 @@ namespace PingTest.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon logo_micro_green {
+            get {
+                object obj = ResourceManager.GetObject("logo_micro_green", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon logo_micro_normal {
+            get {
+                object obj = ResourceManager.GetObject("logo_micro_normal", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon logo_micro_orange {
+            get {
+                object obj = ResourceManager.GetObject("logo_micro_orange", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon logo_micro_purple {
+            get {
+                object obj = ResourceManager.GetObject("logo_micro_purple", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon logo_micro_red {
+            get {
+                object obj = ResourceManager.GetObject("logo_micro_red", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon logo_micro_yellow {
+            get {
+                object obj = ResourceManager.GetObject("logo_micro_yellow", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

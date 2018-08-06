@@ -155,11 +155,15 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="logo icon correct.ico" />
+    <None Include="Resources\logo_micro_yellow.ico" />
+    <None Include="Resources\logo_micro_red.ico" />
+    <None Include="Resources\logo_micro_purple.ico" />
+    <None Include="Resources\logo_micro_orange.ico" />
+    <None Include="Resources\logo_micro_green.ico" />
+    <None Include="Resources\logo_micro_normal.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
