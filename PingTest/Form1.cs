@@ -1,153 +1,187 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.NetworkInformation;
 using System.Net;
 using System.Threading;
-using System.Diagnostics;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace PingTest
 {
     public partial class Form1 : Form
     {
-        private AutoResetEvent waiter = new AutoResetEvent(false);
+        public bool needRestart;
+        // thread ping waiter
+        public AutoResetEvent waiter = new AutoResetEvent(false);
 
-        private const int WM_NCHITTEST = 0x84;
-        private const int HT_CLIENT = 0x1;
-        private const int HT_CAPTION = 0x2;
-        private const int WM_NCRBUTTONDOWN = 0xa4;
+        //Creates a layered window.
+        private const int WS_EX_LAYERED = 0x80000;
+
+        //Specifies that a window created with this style should not be painted until siblings beneath the window (that were created by the same thread) have been painted.
+        //The window appears transparent because the bits of underlying sibling windows have already been painted.
+        private const int WS_EX_TRANSPARENT = 0x20;
+
+
+        // Invoking thread to set text
+        delegate void SetTextCallback(string text);
+
+        private CancellationTokenSource cts = new CancellationTokenSource();
+        public CancellationTokenSource reset;
+
         Series newSeries = new Series();
 
-        static string IPTarget = "8.8.8.8";
-        Ping pingSender = new Ping();
-        IPAddress address = IPAddress.Parse(IPTarget);
+        private bool mouseDown;
+        private Point lastLocation;
 
-        delegate void SetTextCallback(string text);
-        delegate void SetChartCallback();
-
-        protected override void WndProc(ref Message m)
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
-            base.WndProc(ref m);
-            if (m.Msg == WM_NCHITTEST)
-                m.Result = (IntPtr)(HT_CAPTION);
-            
-            if (m.Msg == WM_NCRBUTTONDOWN)
+            mouseDown = true;
+            lastLocation = e.Location;
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDown)
             {
-                var pos = new Point(m.LParam.ToInt32());
-                OnTitlebarClick(pos);
-            }           
+                this.Location = new Point(
+                    (this.Location.X - lastLocation.X) + e.X, (this.Location.Y - lastLocation.Y) + e.Y);
+
+                this.Update();
+            }
         }
 
-        protected void OnTitlebarClick(Point pos)
+        private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
-            contextMenuStrip1.Show(pos);
+            mouseDown = false;
         }
+
+        //set to click thru
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                if (!Properties.Settings.Default.Clickable)
+                {
+                    cp.ExStyle |= WS_EX_LAYERED | WS_EX_TRANSPARENT;
+                }
+                return cp;
+            }
+        }
+
 
         public Form1()
         {
             InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.None;
+            LoadFormPosition();
+            CheckLicense();            
             MakeSeries();
-            ThreadPool.QueueUserWorkItem(o => DoPingAsync(IPTarget));
+            needRestart = false;            
+            ThreadPool.QueueUserWorkItem(async q => await SetupPingAsync(cts.Token));
+        }
+
+        private void CheckLicense()
+        {
+            AppFunction appFunction = new AppFunction();
+            bool errorEx = false;
+            string licenseTitle = appFunction.CheckLicenseString(Properties.Settings.Default.LicenseCode);
+            if (licenseTitle == string.Empty) licenseTitle = appFunction.CheckLicense(AppFunction.LicenseType.Title, ref errorEx);
+
+            if (licenseTitle == string.Empty)
+            {
+                Donation donationForm = new Donation();
+                donationForm.Show();
+            }
+        }
+
+        private void LoadFormPosition()
+        {
+            this.Opacity = (float)Properties.Settings.Default.Tranparency / 100;
+            if (this.Opacity == 1 && !Properties.Settings.Default.Clickable) this.Opacity = (float)99 / 100;
+            this.Location = new Point(Properties.Settings.Default.WPosX, Properties.Settings.Default.WPosY);
+            this.TopMost = Properties.Settings.Default.AlwaysOnTop;
+            this.ShowInTaskbar = !this.TopMost;
         }
 
         private void MakeSeries()
         {
-            Console.WriteLine("we get in?");
-            
             PingChart.Series.Add(newSeries);
             newSeries.ChartArea = "ChartArea1";
             newSeries.ChartType = SeriesChartType.Line;
             newSeries.Color = Color.White;
             newSeries.MarkerColor = Color.White;
             newSeries.MarkerStyle = MarkerStyle.Circle;
-            newSeries.MarkerSize = 1;
+            newSeries.MarkerSize = 0;
         }
 
-        private void DoPingAsync(string args)
+        private async Task SetupPingAsync(CancellationToken ct)
+        {            
+            while (!ct.IsCancellationRequested)
+            {
+                reset = new CancellationTokenSource();
+                await DoPingAsync(reset.Token);
+                reset.Dispose();
+                //needRestart = false;
+            }
+        }
+
+        private async Task DoPingAsync(CancellationToken ct)
         {
-
-            if (args.Length == 0)
-                throw new ArgumentException("Ping needs a host or IP Address.");
-
-            string who = args;
-
-
+            // load IP address from data serialization
+            string IPTarget = Properties.Settings.Default.PingIPAddress;
+            IPAddress address = null;
+            try
+            {
+                address = IPAddress.Parse(IPTarget);
+            }
+            catch
+            {
+                SetText("Invalid");
+            }
 
             Ping pingSender = new Ping();
 
-            // When the PingCompleted event is raised,
-            // the PingCompletedCallback method is called.
+            // attach event handler when completed
             pingSender.PingCompleted += new PingCompletedEventHandler(PingCompletedCallback);
 
-            /*
-            // Create a buffer of 1 bytes of data to be transmitted.
-            string data = "1";
-            byte[] buffer = Encoding.ASCII.GetBytes(data);
-            */
             // Wait 5 seconds for a reply.
             int timeout = 5000;
 
-            // Set options for transmission:
-            // The data can go through 64 gateways or routers
-            // before it is destroyed, and the data packet
-            // cannot be fragmented.
-            /*
-            PingOptions options = new PingOptions(64, true);
-
-            Console.WriteLine("Time to live: {0}", options.Ttl);
-            Console.WriteLine("Don't fragment: {0}", options.DontFragment);
-            */
-            // Send the ping asynchronously.
-            // Use the waiter as the user token.
-            // When the callback completes, it can wake up this thread.
-            //Trace.WriteLine("Ping example started.");
-
-            SetChart();
-
-            do
+            //using ctr mean the form close will wait until sendasync finishes its task (waiting for the timeout is too long)
+            //using (CancellationTokenRegistration ctr = ct.Register(() => pingSender.SendAsyncCancel()))
             {
-                Thread.Sleep(1000);
-                pingSender.SendAsync(who, timeout, waiter);
-                //Console.WriteLine("waits on AutoResetEvent");
-                waiter.WaitOne();
-            } while (true);
-            //Console.WriteLine("Ping example completed.");
+                while (/*!needRestart && */!ct.IsCancellationRequested)
+                {
+                    try
+                    {
+                        pingSender.SendAsync(address, timeout, waiter);
+                    }
+                    catch (Exception ex)
+                    {
+                        SetText("Error");
+                        Console.WriteLine(ex.Message);
+                        continue;
+                    }
+                    // waits on AutoResetEvent
+                    // resume on AutoResetEvent.UserState.Set in PingCompletedCallback
+                    waiter.WaitOne();
+
+                    //wait 1 sec after ping completed (instead of bursting every ping finished)
+                    await Task.Delay(1000);
+                }
+            }
         }
 
         private void PingCompletedCallback(object sender, PingCompletedEventArgs e)
         {
-            // If the operation was canceled, display a message to the user.
-            if (e.Cancelled)
+            if (/*!needRestart && */!reset.IsCancellationRequested)
             {
-                Console.WriteLine("Ping canceled.");
-
-                // Let the main thread resume. 
-                // UserToken is the AutoResetEvent object that the main thread 
-                // is waiting for.
-                ((AutoResetEvent)e.UserState).Set();
+                PingReply reply = e.Reply;
+                DisplayReply(reply);
             }
-
-            // If an error occurred, display the exception to the user.
-            if (e.Error != null)
-            {
-                Console.WriteLine("Ping failed:");
-                Console.WriteLine(e.Error.ToString());
-
-                // Let the main thread resume. 
-                ((AutoResetEvent)e.UserState).Set();
-            }
-
-            PingReply reply = e.Reply;
-
-            DisplayReply(reply);
 
             // Let the main thread resume.
             ((AutoResetEvent)e.UserState).Set();
@@ -158,32 +192,16 @@ namespace PingTest
             if (reply == null)
                 return;
 
-            //Console.WriteLine("ping status: {0}", reply.Status.ToString());
             if (reply.Status == IPStatus.Success)
             {
                 SetText(reply.RoundtripTime.ToString());
             }
             else
             {
+                // return the error code to the display
                 string statusCode = reply.Status.ToString();
-                if (statusCode == "11050") statusCode = "Error";
+                if (statusCode == "11050") statusCode = "NoNetSvc";
                 SetText(statusCode);
-            }
-        }
-
-        private void SetChart()
-        {
-            // InvokeRequired required compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
-            // If these threads are different, it returns true.
-            if (this.PingChart.InvokeRequired)
-            {
-                SetChartCallback d = new SetChartCallback(SetChart);
-                this.Invoke(d, new object[] {});
-            }
-            else
-            {
-                this.PingChart.Visible = true;
             }
         }
 
@@ -202,7 +220,11 @@ namespace PingTest
                 this.PingLabel.Text = text;
                 if (newSeries.Points.Count >= 10)
                 {
-                    newSeries.Points.RemoveAt(0);
+                    // remove the oldest data and in case more than 1 happened
+                    do
+                    {
+                        newSeries.Points.RemoveAt(0);
+                    } while (newSeries.Points.Count >= 10);
                 }
                 try
                 {
@@ -213,52 +235,90 @@ namespace PingTest
                     if (pingTime <= 300)
                     {
                         this.PingLabel.ForeColor = Color.White;
-                        //Console.WriteLine("Warna putih " + PingLabel.ForeColor);
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.White;
                     }
                     else if (pingTime >= 300 && pingTime < 1000)
                     {
                         this.PingLabel.ForeColor = Color.Orange;
-                        //Console.WriteLine("Warna oren " + PingLabel.ForeColor);
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Orange;
                     }
                     else
                     {
                         this.PingLabel.ForeColor = Color.Red;
-                        //Console.WriteLine("Warna mewah " + PingLabel.ForeColor);
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Red;
                     }
 
                     this.PingLabel.Text += " ms";
-       
-                    PingChart.ChartAreas[0].AxisX.Maximum = newSeries.Points[newSeries.Points.Count - 1].XValue;
-                    PingChart.ChartAreas[0].AxisX.Minimum = newSeries.Points[0].XValue;
-                    PingChart.ChartAreas[0].AxisY.Maximum = newSeries.Points.Max(y => y.YValues[0]);
-                    PingChart.ChartAreas[0].AxisY.Minimum = newSeries.Points.Min(y => y.YValues[0]);
-                    double axisInterval;
-                    if (PingChart.ChartAreas[0].AxisY.Maximum - PingChart.ChartAreas[0].AxisY.Minimum <= 3)
-                    {
-                        PingChart.ChartAreas[0].AxisY.Maximum += 3;
-                    }
-                    axisInterval = (PingChart.ChartAreas[0].AxisY.Maximum - PingChart.ChartAreas[0].AxisY.Minimum) / 3.3;
-                    PingChart.ChartAreas[0].AxisY.LabelStyle.Interval = axisInterval;
+
+                    RedrawGraph();
                 }
+                // ping result is not number
                 catch
                 {
                     this.PingLabel.ForeColor = Color.Red;
+                    // add a straight horizontal line from the last data
                     if (newSeries.Points.Count != 0)
                     {
                         newSeries.Points.AddXY(DateTime.Now, newSeries.Points[newSeries.Points.Count - 1].YValues[0]);
                     }
-                    else newSeries.Points.AddXY(DateTime.Now, 0);
-                    this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Transparent;
+                    else
+                    {
+                        newSeries.Points.AddXY(DateTime.Now, 0);
+                    }
+                    this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Purple;
+                    RedrawGraph();
                 }
             }
+        }
+
+        // readjust the min-max x axis and y axis value of the chart
+        private void RedrawGraph()
+        {
+            PingChart.ChartAreas[0].AxisX.Maximum = newSeries.Points[newSeries.Points.Count - 1].XValue;
+            PingChart.ChartAreas[0].AxisX.Minimum = newSeries.Points[0].XValue;
+            PingChart.ChartAreas[0].AxisY.Maximum = newSeries.Points.Max(y => y.YValues[0]);
+            PingChart.ChartAreas[0].AxisY.Minimum = newSeries.Points.Min(y => y.YValues[0]);
+            // if axis is less than 5, to avoid number crumble on axis invterval (because of without decimal) adds it with 5 
+            if (PingChart.ChartAreas[0].AxisY.Maximum - PingChart.ChartAreas[0].AxisY.Minimum <= 5)
+            {
+                PingChart.ChartAreas[0].AxisY.Maximum = PingChart.ChartAreas[0].AxisY.Minimum + 5;
+            }
+            double axisInterval;
+            //axis interval need to be more than 3 to avoid axis chart display on top max (which is not displayed at all)
+            axisInterval = (PingChart.ChartAreas[0].AxisY.Maximum - PingChart.ChartAreas[0].AxisY.Minimum) / 3.2;
+            PingChart.ChartAreas[0].AxisY.LabelStyle.Interval = axisInterval;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Settings openFormSettings = Application.OpenForms["Settings"] as Settings;
+            if (openFormSettings == null)
+            {
+                Settings FormSettings = new Settings(this);
+                FormSettings.Show();
+            }
+            else
+            {
+                openFormSettings.Focus();
+            }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Properties.Settings.Default.WPosX = this.Location.X;
+            Properties.Settings.Default.WPosY = this.Location.Y;
+            Properties.Settings.Default.Save();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            reset.Cancel();
+            cts.Cancel();
         }
     }
 }

@@ -15,6 +15,7 @@ Global
 		{C7136844-FFC7-4AEB-88CA-1D7D62370512}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7136844-FFC7-4AEB-88CA-1D7D62370512}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7136844-FFC7-4AEB-88CA-1D7D62370512}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7136844-FFC7-4AEB-88CA-1D7D62370512}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

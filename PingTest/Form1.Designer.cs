@@ -16,6 +16,11 @@
             if (disposing && (components != null))
             {
                 components.Dispose();
+                this.cts.Dispose();
+                this.reset.Dispose();
+                this.newSeries.Dispose();
+                this.waiter.Dispose();
+                this.notifyIcon.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -30,12 +35,14 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.PingLabel = new System.Windows.Forms.Label();
             this.PingChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.PingChart)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -50,7 +57,7 @@
             this.PingLabel.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.PingLabel.Name = "PingLabel";
             this.PingLabel.Padding = new System.Windows.Forms.Padding(2, 0, 0, 3);
-            this.PingLabel.Size = new System.Drawing.Size(120, 17);
+            this.PingLabel.Size = new System.Drawing.Size(63, 17);
             this.PingLabel.TabIndex = 0;
             this.PingLabel.Text = "-";
             this.PingLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -111,7 +118,6 @@
             this.PingChart.SuppressExceptions = true;
             this.PingChart.TabIndex = 1;
             this.PingChart.Text = "chart1";
-            this.PingChart.Visible = false;
             // 
             // contextMenuStrip1
             // 
@@ -127,6 +133,7 @@
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -140,25 +147,38 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // notifyIcon
+            // 
+            this.notifyIcon.ContextMenuStrip = this.contextMenuStrip1;
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "Ping Test";
+            this.notifyIcon.Visible = true;
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(120, 61);
+            this.ClientSize = new System.Drawing.Size(63, 61);
             this.ContextMenuStrip = this.contextMenuStrip1;
             this.ControlBox = false;
             this.Controls.Add(this.PingLabel);
             this.Controls.Add(this.PingChart);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(16, 39);
+            this.MinimumSize = new System.Drawing.Size(1, 1);
             this.Name = "Form1";
             this.Opacity = 0.5D;
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.Text = "Form1";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            this.Text = "PingTest";
             this.TopMost = true;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseUp);
             ((System.ComponentModel.ISupportInitialize)(this.PingChart)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -173,6 +193,7 @@
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
     }
 }
 
