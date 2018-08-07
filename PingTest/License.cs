@@ -21,6 +21,7 @@ namespace PingTest
             InitializeComponent();
             this.AcceptButton = okButton;
             this.Icon = Properties.Resources.logo_icon_complete;
+            this.ActiveControl = licenseTxtBox;
             initialLicenseCode = Properties.Settings.Default.LicenseCode;           
             if (initialLicenseCode == string.Empty)
             {
