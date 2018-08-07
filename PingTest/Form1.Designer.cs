@@ -34,7 +34,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.PingLabel = new System.Windows.Forms.Label();
             this.PingChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -52,6 +52,9 @@
             this.toBottomRightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toBottomLeftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toTopLeftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clickableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.makeClickableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.makeUnClickableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
@@ -83,47 +86,47 @@
             this.PingChart.BorderlineColor = System.Drawing.Color.Transparent;
             this.PingChart.BorderlineWidth = 0;
             this.PingChart.BorderSkin.BorderWidth = 0;
-            chartArea1.AxisX.IsLabelAutoFit = false;
-            chartArea1.AxisX.IsMarginVisible = false;
-            chartArea1.AxisX.LabelStyle.Enabled = false;
-            chartArea1.AxisX.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            chartArea1.AxisX.LabelStyle.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea1.AxisX.LineColor = System.Drawing.Color.Transparent;
-            chartArea1.AxisX.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.AxisX.MajorGrid.Enabled = false;
-            chartArea1.AxisX.MajorTickMark.Enabled = false;
-            chartArea1.AxisX.TitleForeColor = System.Drawing.Color.Transparent;
-            chartArea1.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea1.AxisX2.TitleForeColor = System.Drawing.Color.Transparent;
-            chartArea1.AxisY.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
-            chartArea1.AxisY.IsLabelAutoFit = false;
-            chartArea1.AxisY.IsMarginVisible = false;
-            chartArea1.AxisY.LabelAutoFitStyle = ((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles)(((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.StaggeredLabels) 
+            chartArea2.AxisX.IsLabelAutoFit = false;
+            chartArea2.AxisX.IsMarginVisible = false;
+            chartArea2.AxisX.LabelStyle.Enabled = false;
+            chartArea2.AxisX.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            chartArea2.AxisX.LabelStyle.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea2.AxisX.LineColor = System.Drawing.Color.Transparent;
+            chartArea2.AxisX.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea2.AxisX.MajorGrid.Enabled = false;
+            chartArea2.AxisX.MajorTickMark.Enabled = false;
+            chartArea2.AxisX.TitleForeColor = System.Drawing.Color.Transparent;
+            chartArea2.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea2.AxisX2.TitleForeColor = System.Drawing.Color.Transparent;
+            chartArea2.AxisY.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
+            chartArea2.AxisY.IsLabelAutoFit = false;
+            chartArea2.AxisY.IsMarginVisible = false;
+            chartArea2.AxisY.LabelAutoFitStyle = ((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles)(((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.StaggeredLabels) 
             | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.WordWrap)));
-            chartArea1.AxisY.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            chartArea1.AxisY.LabelStyle.ForeColor = System.Drawing.Color.White;
-            chartArea1.AxisY.LabelStyle.Format = "D";
-            chartArea1.AxisY.LabelStyle.Interval = 0D;
-            chartArea1.AxisY.LineColor = System.Drawing.Color.Transparent;
-            chartArea1.AxisY.MajorGrid.Enabled = false;
-            chartArea1.AxisY.MajorTickMark.Enabled = false;
-            chartArea1.AxisY.MajorTickMark.LineColor = System.Drawing.Color.Silver;
-            chartArea1.AxisY.Minimum = 0D;
-            chartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea1.BackColor = System.Drawing.Color.Transparent;
-            chartArea1.BackImageTransparentColor = System.Drawing.Color.Transparent;
-            chartArea1.BackSecondaryColor = System.Drawing.Color.Transparent;
-            chartArea1.BorderWidth = 0;
-            chartArea1.InnerPlotPosition.Auto = false;
-            chartArea1.InnerPlotPosition.Height = 52F;
-            chartArea1.InnerPlotPosition.Width = 65F;
-            chartArea1.InnerPlotPosition.X = 27F;
-            chartArea1.InnerPlotPosition.Y = 13F;
-            chartArea1.Name = "ChartArea1";
-            chartArea1.Position.Auto = false;
-            chartArea1.Position.Height = 100F;
-            chartArea1.Position.Width = 100F;
-            this.PingChart.ChartAreas.Add(chartArea1);
+            chartArea2.AxisY.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            chartArea2.AxisY.LabelStyle.ForeColor = System.Drawing.Color.White;
+            chartArea2.AxisY.LabelStyle.Format = "D";
+            chartArea2.AxisY.LabelStyle.Interval = 0D;
+            chartArea2.AxisY.LineColor = System.Drawing.Color.Transparent;
+            chartArea2.AxisY.MajorGrid.Enabled = false;
+            chartArea2.AxisY.MajorTickMark.Enabled = false;
+            chartArea2.AxisY.MajorTickMark.LineColor = System.Drawing.Color.Silver;
+            chartArea2.AxisY.Minimum = 0D;
+            chartArea2.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea2.BackColor = System.Drawing.Color.Transparent;
+            chartArea2.BackImageTransparentColor = System.Drawing.Color.Transparent;
+            chartArea2.BackSecondaryColor = System.Drawing.Color.Transparent;
+            chartArea2.BorderWidth = 0;
+            chartArea2.InnerPlotPosition.Auto = false;
+            chartArea2.InnerPlotPosition.Height = 52F;
+            chartArea2.InnerPlotPosition.Width = 65F;
+            chartArea2.InnerPlotPosition.X = 27F;
+            chartArea2.InnerPlotPosition.Y = 13F;
+            chartArea2.Name = "ChartArea1";
+            chartArea2.Position.Auto = false;
+            chartArea2.Position.Height = 100F;
+            chartArea2.Position.Width = 100F;
+            this.PingChart.ChartAreas.Add(chartArea2);
             this.PingChart.Enabled = false;
             this.PingChart.Location = new System.Drawing.Point(0, 0);
             this.PingChart.Margin = new System.Windows.Forms.Padding(0);
@@ -140,22 +143,23 @@
             this.settingsToolStripMenuItem,
             this.toolStripSeparator1,
             this.positionToolStripMenuItem,
+            this.clickableToolStripMenuItem,
             this.toolStripMenuItem1,
             this.exitToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(118, 82);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(123, 104);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(114, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(119, 6);
             // 
             // positionToolStripMenuItem
             // 
@@ -172,7 +176,7 @@
             this.toBottomLeftToolStripMenuItem,
             this.toTopLeftToolStripMenuItem});
             this.positionToolStripMenuItem.Name = "positionToolStripMenuItem";
-            this.positionToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.positionToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.positionToolStripMenuItem.Text = "Position";
             // 
             // resetToCenterToolStripMenuItem
@@ -248,15 +252,39 @@
             this.toTopLeftToolStripMenuItem.Text = "To Top-Left";
             this.toTopLeftToolStripMenuItem.Click += new System.EventHandler(this.toTopLeftToolStripMenuItem_Click);
             // 
+            // clickableToolStripMenuItem
+            // 
+            this.clickableToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.makeClickableToolStripMenuItem,
+            this.makeUnClickableToolStripMenuItem});
+            this.clickableToolStripMenuItem.Name = "clickableToolStripMenuItem";
+            this.clickableToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.clickableToolStripMenuItem.Text = "Clickable";
+            this.clickableToolStripMenuItem.DropDownOpening += new System.EventHandler(this.clickableToolStripMenuItem_DropDownOpening);
+            // 
+            // makeClickableToolStripMenuItem
+            // 
+            this.makeClickableToolStripMenuItem.Name = "makeClickableToolStripMenuItem";
+            this.makeClickableToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.makeClickableToolStripMenuItem.Text = "Make Clickable";
+            this.makeClickableToolStripMenuItem.Click += new System.EventHandler(this.makeClickableToolStripMenuItem_Click);
+            // 
+            // makeUnClickableToolStripMenuItem
+            // 
+            this.makeUnClickableToolStripMenuItem.Name = "makeUnClickableToolStripMenuItem";
+            this.makeUnClickableToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.makeUnClickableToolStripMenuItem.Text = "Make Un-Clickable";
+            this.makeUnClickableToolStripMenuItem.Click += new System.EventHandler(this.makeUnClickableToolStripMenuItem_Click);
+            // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(114, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(119, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -304,7 +332,6 @@
 
         private System.Windows.Forms.Label PingLabel;
         private System.Windows.Forms.DataVisualization.Charting.Chart PingChart;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
@@ -322,6 +349,10 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         public System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.ToolStripMenuItem clickableToolStripMenuItem;
+        protected System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        public System.Windows.Forms.ToolStripMenuItem makeClickableToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem makeUnClickableToolStripMenuItem;
     }
 }
 

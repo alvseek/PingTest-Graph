@@ -19,14 +19,6 @@ namespace PingTest
     {
         ToolTip errorToolTip = new ToolTip();
         ToolTip errorRegistryToolTip = new ToolTip();
-        //Creates a layered window.
-        private const uint WS_EX_LAYERED = 0x00080000;
-
-        //Specifies that a window created with this style should not be painted until siblings beneath the window (that were created by the same thread) have been painted.
-        //The window appears transparent because the bits of underlying sibling windows have already been painted.
-        private const uint WS_EX_TRANSPARENT = 0x00000020;
-
-        private const int GWL_EXSTYLE = -20;
 
         // autorun key address
         RegistryKey rk; //= Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
@@ -48,45 +40,6 @@ namespace PingTest
             public string Text { get; set; }
             public string Value { get; set; }
         }
-
-        #region win32 on the fly clickable function
-        internal static class NativeMethods
-        {
-            [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
-            public static extern IntPtr GetWindowLongPtr32(IntPtr hWnd, int nIndex);
-
-            [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
-            public static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, int nIndex);
-
-            [DllImport("user32.dll", EntryPoint = "SetWindowLong")]
-            public static extern int SetWindowLong32(HandleRef hWnd, int nIndex, int dwNewLong);
-
-            [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
-            public static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, int nIndex, IntPtr dwNewLong);
-        }
-        // This static method is required because Win32 does not support
-        // GetWindowLongPtr directly
-        public static IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex)
-        {
-            if (IntPtr.Size == 8)
-                return NativeMethods.GetWindowLongPtr64(hWnd, nIndex);
-            else
-                return NativeMethods.GetWindowLongPtr32(hWnd, nIndex);
-        }
-
-        // This helper static method is required because the 32-bit version of user32.dll does not contain this API
-        // (on any versions of Windows), so linking the method will fail at run-time. The bridge dispatches the request
-        // to the correct function (GetWindowLong in 32-bit mode and GetWindowLongPtr in 64-bit mode)
-        public static IntPtr SetWindowLongPtr(HandleRef hWnd, int nIndex, IntPtr dwNewLong)
-        {
-            if (IntPtr.Size == 8)
-                return NativeMethods.SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
-            else
-                return new IntPtr(NativeMethods.SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
-        }
-
-
-        #endregion
 
         public Settings(Form1 form1Ref)
         {            
@@ -279,26 +232,19 @@ namespace PingTest
             if (clickableChkBox.Checked != Properties.Settings.Default.Clickable)
             {
                 Properties.Settings.Default.Clickable = clickableChkBox.Checked;
-                IntPtr initialStyle = GetWindowLongPtr(this.Handle, -20);
+                Properties.Settings.Default.Save();
+                UIFunction.Win32Access win32Access = new UIFunction.Win32Access();
                 if (!clickableChkBox.Checked)
                 {
-                    if (openForm1.Opacity == 1) openForm1.Opacity = (float)99.99 / 100;
-                    SetWindowLongPtr(new HandleRef(openForm1, openForm1.Handle), -20, (IntPtr)((int)initialStyle | WS_EX_LAYERED | WS_EX_TRANSPARENT));
-                    Properties.Settings.Default.Clickable = false;
+                    //transparent and not clickable
+                    win32Access.MakeUnClickable(openForm1);                    
                     //openForm1.notifyIcon.ShowBalloonTip(5000);
                 }
                 else
                 {
-                    SetWindowLongPtr(new HandleRef(openForm1, openForm1.Handle), -20, (IntPtr)((int)initialStyle & ~WS_EX_LAYERED & ~WS_EX_TRANSPARENT));
-                    SetWindowLongPtr(new HandleRef(openForm1, openForm1.Handle), -20, (IntPtr)((int)initialStyle | WS_EX_LAYERED));
-                    openForm1.Opacity = 0.5;
-                    Properties.Settings.Default.Clickable = true;
-                }
-                openForm1.Hide();
-                openForm1.ShowInTaskbar = openForm1.TopMost;
-                openForm1.ShowInTaskbar = !openForm1.TopMost;
-                openForm1.Show();
-                Properties.Settings.Default.Save();
+                    //transparent clickable
+                    win32Access.MakeClickable(openForm1);                    
+                }                
             }
         }
 
@@ -509,7 +455,7 @@ namespace PingTest
         {
             if (clickableChkBox.Checked == false)
             {
-                MessageBox.Show("You can make it clickable again from the tray/notification icon", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You can always make the application clickable again from the tray/notification icon", "This feature may confuse you", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 

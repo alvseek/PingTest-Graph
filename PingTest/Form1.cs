@@ -91,6 +91,7 @@ namespace PingTest
             InitializeComponent();
             this.Icon = Properties.Resources.logo_icon_complete;
             LoadFormPosition();
+            InitializeToolStripMenu();
             CheckLicense();
             MakeSeries();
             ThreadPool.QueueUserWorkItem(async q => await SetupPingAsync(cts.Token));
@@ -113,6 +114,12 @@ namespace PingTest
             }
             this.TopMost = Properties.Settings.Default.AlwaysOnTop;
             this.ShowInTaskbar = !this.TopMost;
+        }
+
+        private void InitializeToolStripMenu()
+        {
+            makeUnClickableToolStripMenuItem.Available = Properties.Settings.Default.Clickable;
+            makeClickableToolStripMenuItem.Available = !makeUnClickableToolStripMenuItem.Available;
         }
 
         private void CheckLicense()
@@ -349,6 +356,33 @@ namespace PingTest
             {
                 openFormSettings.Focus();
             }
+        }
+
+        private void makeClickableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UIFunction.Win32Access win32Access = new UIFunction.Win32Access();
+            win32Access.MakeClickable(this);
+            makeClickableToolStripMenuItem.Visible = false;
+            makeUnClickableToolStripMenuItem.Visible = true;
+        }
+
+        private void makeUnClickableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            QuestionWindow questionWindow = new QuestionWindow("Do you want to make the application unclickable?\n\nYou can make the application clickable again from the tray/notification icon", "This feature may confuse you");
+            questionWindow.ShowDialog();
+            if (questionWindow.DialogResult == DialogResult.Yes)
+            {
+                UIFunction.Win32Access win32Access = new UIFunction.Win32Access();
+                win32Access.MakeUnClickable(this);
+                makeUnClickableToolStripMenuItem.Visible = false;
+                makeClickableToolStripMenuItem.Visible = true;
+            }
+            questionWindow.Dispose();
+        }
+
+        private void clickableToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            InitializeToolStripMenu();
         }
 
         #region Position Tool Strip Menu Function
