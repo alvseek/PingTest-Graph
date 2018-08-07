@@ -285,6 +285,7 @@ namespace PingTest
                     if (openForm1.Opacity == 1) openForm1.Opacity = (float)99.99 / 100;
                     SetWindowLongPtr(new HandleRef(openForm1, openForm1.Handle), -20, (IntPtr)((int)initialStyle | WS_EX_LAYERED | WS_EX_TRANSPARENT));
                     Properties.Settings.Default.Clickable = false;
+                    //openForm1.notifyIcon.ShowBalloonTip(5000);
                 }
                 else
                 {

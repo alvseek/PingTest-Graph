@@ -252,24 +252,28 @@ namespace PingTest
                         this.PingLabel.ForeColor = Color.White;
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.White;
                         notifyIcon.Icon = Properties.Resources.logo_micro_green;
+                        notifyIcon.Text = "Ping Test Result\nUnder 100ms";
                     }
                     else if (pingTime >= 100 && pingTime < 300)
                     {
                         this.PingLabel.ForeColor = Color.Yellow;
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Yellow;
                         notifyIcon.Icon = Properties.Resources.logo_micro_yellow;
+                        notifyIcon.Text = "Ping Test Result\nBetween 100ms and 300ms";
                     }
                     else if (pingTime >= 300 && pingTime < 1000)
                     {
                         this.PingLabel.ForeColor = Color.Orange;
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Orange;
                         notifyIcon.Icon = Properties.Resources.logo_micro_orange;
+                        notifyIcon.Text = "Ping Test Result\nBetween 300ms and 1000ms";
                     }
                     else
                     {
                         this.PingLabel.ForeColor = Color.Red;
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Red;
                         notifyIcon.Icon = Properties.Resources.logo_micro_red;
+                        notifyIcon.Text = "Ping Test Result\nAbove 1000ms";
                     }
 
                     this.PingLabel.Text += " ms";
@@ -402,6 +406,14 @@ namespace PingTest
         {
             reset.Cancel();
             cts.Cancel();
+        }
+
+        private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                this.Activate();
+            }
         }
     }
 }
