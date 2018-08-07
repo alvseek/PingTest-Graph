@@ -15,6 +15,15 @@ namespace PingTest
     {
         #region basic Form properties
 
+        #region color
+        private Color color1st = Color.White;
+        private Color color2nd = Color.Wheat;
+        private Color color3rd = Color.Orange;
+        private Color color4th = Color.Red;
+        private Color color5th = Color.Purple;
+
+        #endregion
+
         #region clickable constant properties of win32.dll address
         //Creates a layered window.
         private const int WS_EX_LAYERED = 0x80000;
@@ -249,33 +258,33 @@ namespace PingTest
 
                     if (pingTime < 100)
                     {
-                        this.PingLabel.ForeColor = Color.White;
-                        this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.White;
-                        PingChart.ChartAreas[0].AxisY.LabelStyle.ForeColor = Color.White;
+                        this.PingLabel.ForeColor = color1st;
+                        this.newSeries.Points[newSeries.Points.Count - 1].Color = color1st;
+                        PingChart.ChartAreas[0].AxisY.LabelStyle.ForeColor = color1st;
                         notifyIcon.Icon = Properties.Resources.logo_micro_green;
                         notifyIcon.Text = "Ping Test Result\nUnder 100ms";                        
                     }
                     else if (pingTime >= 100 && pingTime < 300)
                     {
-                        this.PingLabel.ForeColor = Color.Yellow;
-                        this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Yellow;
-                        PingChart.ChartAreas[0].AxisY.LabelStyle.ForeColor = Color.Yellow;
+                        this.PingLabel.ForeColor = color2nd;
+                        this.newSeries.Points[newSeries.Points.Count - 1].Color = color2nd;
+                        PingChart.ChartAreas[0].AxisY.LabelStyle.ForeColor = color2nd;
                         notifyIcon.Icon = Properties.Resources.logo_micro_yellow;
                         notifyIcon.Text = "Ping Test Result\nBetween 100ms and 300ms";
                     }
                     else if (pingTime >= 300 && pingTime < 1000)
                     {
-                        this.PingLabel.ForeColor = Color.Orange;
-                        this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Orange;
-                        PingChart.ChartAreas[0].AxisY.LabelStyle.ForeColor = Color.Orange;
+                        this.PingLabel.ForeColor = color3rd;
+                        this.newSeries.Points[newSeries.Points.Count - 1].Color = color3rd;
+                        PingChart.ChartAreas[0].AxisY.LabelStyle.ForeColor = color3rd;
                         notifyIcon.Icon = Properties.Resources.logo_micro_orange;
                         notifyIcon.Text = "Ping Test Result\nBetween 300ms and 1000ms";
                     }
                     else
                     {
-                        this.PingLabel.ForeColor = Color.Red;
-                        this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Red;
-                        PingChart.ChartAreas[0].AxisY.LabelStyle.ForeColor = Color.Red;
+                        this.PingLabel.ForeColor = color4th;
+                        this.newSeries.Points[newSeries.Points.Count - 1].Color = color4th;
+                        PingChart.ChartAreas[0].AxisY.LabelStyle.ForeColor = color4th;
                         notifyIcon.Icon = Properties.Resources.logo_micro_red;
                         notifyIcon.Text = "Ping Test Result\nAbove 1000ms";
                     }
@@ -297,7 +306,7 @@ namespace PingTest
                     {
                         newSeries.Points.AddXY(DateTime.Now, 0);
                     }
-                    this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Purple;
+                    this.newSeries.Points[newSeries.Points.Count - 1].Color = color5th;
                     notifyIcon.Icon = Properties.Resources.logo_micro_purple;
                     RedrawGraph();
                 }
