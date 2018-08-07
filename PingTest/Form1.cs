@@ -251,13 +251,15 @@ namespace PingTest
                     {
                         this.PingLabel.ForeColor = Color.White;
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.White;
+                        PingChart.ChartAreas[0].AxisY.LabelStyle.ForeColor = Color.White;
                         notifyIcon.Icon = Properties.Resources.logo_micro_green;
-                        notifyIcon.Text = "Ping Test Result\nUnder 100ms";
+                        notifyIcon.Text = "Ping Test Result\nUnder 100ms";                        
                     }
                     else if (pingTime >= 100 && pingTime < 300)
                     {
                         this.PingLabel.ForeColor = Color.Yellow;
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Yellow;
+                        PingChart.ChartAreas[0].AxisY.LabelStyle.ForeColor = Color.Yellow;
                         notifyIcon.Icon = Properties.Resources.logo_micro_yellow;
                         notifyIcon.Text = "Ping Test Result\nBetween 100ms and 300ms";
                     }
@@ -265,6 +267,7 @@ namespace PingTest
                     {
                         this.PingLabel.ForeColor = Color.Orange;
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Orange;
+                        PingChart.ChartAreas[0].AxisY.LabelStyle.ForeColor = Color.Orange;
                         notifyIcon.Icon = Properties.Resources.logo_micro_orange;
                         notifyIcon.Text = "Ping Test Result\nBetween 300ms and 1000ms";
                     }
@@ -272,6 +275,7 @@ namespace PingTest
                     {
                         this.PingLabel.ForeColor = Color.Red;
                         this.newSeries.Points[newSeries.Points.Count - 1].Color = Color.Red;
+                        PingChart.ChartAreas[0].AxisY.LabelStyle.ForeColor = Color.Red;
                         notifyIcon.Icon = Properties.Resources.logo_micro_red;
                         notifyIcon.Text = "Ping Test Result\nAbove 1000ms";
                     }
