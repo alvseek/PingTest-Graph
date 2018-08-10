@@ -13,6 +13,7 @@ namespace PingTest
 {
     public partial class Form1 : Form
     {
+        static Mutex mut;
         #region basic Form properties
 
         #region color
@@ -89,6 +90,7 @@ namespace PingTest
         public Form1()
         {
             InitializeComponent();
+            mut = new Mutex(false, "PingTestGraphMutex");
             this.Icon = Properties.Resources.logo_icon_complete;
             LoadFormPosition();
             InitializeToolStripMenu();
