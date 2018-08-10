@@ -2,11 +2,15 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Windows.Forms;
 
-namespace PingTest {
+namespace PingTest
+{
 
     public class UIFunction
     {
@@ -56,7 +60,7 @@ namespace PingTest {
                     return new IntPtr(NativeMethods.SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
             }
 
-            private void ReShowForm (Form openForm)
+            private void ReShowForm(Form openForm)
             {
                 openForm.Hide();
                 openForm.ShowInTaskbar = openForm.TopMost;
@@ -151,97 +155,159 @@ namespace PingTest {
 
         public string CheckLicenseString(string license)
         {
-            switch (license)
+            EncryptLicense encryptLicense = new EncryptLicense();
+            short[] decodeLicense = encryptLicense.DecodeLicense(license);
+            if (encryptLicense.EncryptContributor(decodeLicense))
             {
-                case "honestymakesthebestoutofyou":
-                case "kindnessisatwowaygiving":
-                case "hardworkneverlies":
-                case "truelovelastforever":
-                case "evenasmallkindnesscount":
-                    return "Contributor";
-                case "wherethereislovenothingistoomuchtroubleandthereisalwaystime":
-                case "ifyoueverfeelalonethemedicineistomakeotherpeoplefeelsaccompanied":
-                case "everytearscountbuteveryangereraseit":
-                case "thosewhoactpaidhigherthanthosewhotalkbutthosewhodobothgetmostofit":
-                case "behappybehappybefullofjoy":
-                    return "Sponsor";
-                case "whathumanneedthemostisthewarmofheart":
-                case "thetruehappinessalwayscomewithgivingsomething":
-                case "asuccessisalwaysmadefromgoodmistakes":
-                case "awarmhugissohelpingthatyoumaywanttotradethewholeworldforit":
-                case "thefinalgoalofbeinghumanistomaketheworldjustabitbetter":
-                    return "The Great Philanthropist";
+                return "Contributor";
             }
-            return string.Empty;
+            else if (encryptLicense.EncryptSponsor(decodeLicense))
+            {
+                return "Sponsor";
+            }
+            else if (encryptLicense.EncryptPhilanthropist(decodeLicense))
+            {
+                return "The Great Philanthropist";
+            }
+            else return string.Empty;
+        }
+
+        private class EncryptLicense
+        {
+            public bool EncryptContributor(short[] encrypted)
+            {
+                short[][] type1 = new short[5][];
+                type1[0] = new short[] { 241, 235, 245, 226, 235, 240, 241, 235, 240, 239, 225, 222, 225, 228, 240, 239, 225, 231, 221, 233, 245, 240, 239, 225, 234, 235, 228 };
+                type1[1] = new short[] { 219, 226, 221, 234, 221, 219, 237, 213, 235, 227, 235, 232, 213, 231, 221, 231, 231, 217, 226, 216, 226, 221, 223 };
+                type1[2] = new short[] { 219, 205, 209, 212, 218, 205, 222, 205, 214, 211, 218, 215, 223, 204, 218, 201, 208 };
+                type1[3] = new short[] { 222, 209, 226, 209, 222, 219, 210, 224, 223, 205, 216, 209, 226, 219, 216, 209, 225, 222, 224 };
+                type1[4] = new short[] { 232, 226, 233, 227, 215, 231, 231, 217, 226, 216, 226, 221, 223, 224, 224, 213, 225, 231, 213, 226, 217, 234, 217 };
+                foreach (short[] type1check in type1)
+                {
+                    if (Enumerable.SequenceEqual(encrypted, type1check))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            public bool EncryptSponsor(short[] encrypted)
+            {
+                short[][] type2 = new short[5][];
+                type2[0] = new short[] { 289, 297, 293, 304, 303, 309, 285, 307, 296, 285, 303, 293, 289, 302, 289, 292, 304, 288, 298, 285, 289, 296, 286, 305, 299, 302, 304, 292, 287, 305, 297, 299, 299, 304, 303, 293, 291, 298, 293, 292, 304, 299, 298, 289, 306, 299, 296, 303, 293, 289, 302, 289, 292, 304, 289, 302, 289, 292, 307 };
+                type2[1] = new short[] { 298, 299, 303, 308, 295, 310, 307, 309, 297, 297, 295, 313, 306, 299, 299, 300, 299, 306, 310, 309, 299, 310, 312, 299, 302, 314, 309, 299, 305, 295, 307, 309, 314, 313, 303, 299, 308, 303, 297, 303, 298, 299, 307, 299, 302, 314, 299, 308, 309, 306, 295, 306, 299, 299, 300, 312, 299, 316, 299, 315, 309, 319, 300, 303 };
+                type2[2] = new short[] { 256, 245, 241, 255, 237, 254, 241, 254, 241, 243, 250, 237, 261, 254, 241, 258, 241, 256, 257, 238, 256, 250, 257, 251, 239, 255, 254, 237, 241, 256, 261, 254, 241, 258, 241 };
+                type2[3] = new short[] { 316, 305, 302, 311, 316, 315, 311, 309, 316, 301, 303, 304, 316, 311, 298, 311, 300, 311, 304, 319, 301, 315, 311, 304, 316, 316, 317, 298, 307, 308, 297, 316, 311, 304, 319, 301, 315, 311, 304, 316, 310, 297, 304, 316, 314, 301, 304, 303, 305, 304, 300, 305, 297, 312, 316, 299, 297, 311, 304, 319, 301, 315, 311, 304, 316 };
+                type2[4] = new short[] { 241, 231, 226, 222, 231, 228, 228, 237, 222, 221, 218, 241, 232, 232, 217, 224, 221, 218, 241, 232, 232, 217, 224, 221, 218 };
+
+                foreach (short[] type2check in type2)
+                {
+                    if (Enumerable.SequenceEqual(encrypted, type2check))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            public bool EncryptPhilanthropist(short[] encrypted)
+            {
+                short[][] type3 = new short[5][];
+                type3[0] = new short[] { 258, 256, 239, 243, 246, 244, 253, 251, 256, 239, 261, 243, 246, 258, 257, 247, 258, 257, 253, 251, 243, 246, 258, 242, 243, 243, 252, 252, 239, 251, 259, 246, 258, 239, 246, 261 };
+                type3[1] = new short[] { 263, 270, 265, 264, 276, 261, 269, 271, 275, 263, 270, 265, 278, 265, 263, 264, 276, 265, 279, 261, 269, 271, 259, 275, 281, 257, 279, 268, 257, 275, 275, 261, 270, 265, 272, 272, 257, 264, 261, 277, 274, 276, 261, 264, 276 };
+                type3[2] = new short[] { 257, 243, 249, 239, 258, 257, 247, 251, 242, 253, 253, 245, 251, 253, 256, 244, 243, 242, 239, 251, 257, 263, 239, 261, 250, 239, 257, 247, 257, 257, 243, 241, 241, 259, 257, 239 };
+                type3[3] = new short[] { 302, 291, 300, 297, 288, 286, 294, 300, 297, 305, 287, 294, 297, 290, 305, 287, 290, 302, 287, 286, 283, 300, 302, 297, 302, 302, 296, 283, 305, 307, 283, 295, 303, 297, 307, 302, 283, 290, 302, 289, 296, 291, 298, 294, 287, 290, 297, 301, 301, 291, 289, 303, 290, 295, 300, 283, 305, 283 };
+                type3[4] = new short[] { 292, 279, 294, 294, 279, 276, 294, 283, 276, 275, 294, 293, 295, 284, 278, 286, 292, 289, 297, 279, 282, 294, 279, 285, 275, 287, 289, 294, 293, 283, 288, 275, 287, 295, 282, 281, 288, 283, 279, 276, 280, 289, 286, 275, 289, 281, 286, 275, 288, 283, 280, 279, 282, 294 };
+
+                foreach (short[] type3check in type3)
+                {
+                    if (Enumerable.SequenceEqual(encrypted, type3check))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            public short[] DecodeLicense(string input)
+            {
+                short[] encrypted = new short[input.Length];
+                for (int x = 0; x < input.Length; x++)
+                {
+                    encrypted[input.Length - 1 - x] = (short)((short)input[x] + 70 + (input.Length * 2));
+                }
+                return encrypted;
+            }
         }
 
         public string CheckLicense(LicenseType licenseType, out bool exception)
+{
+    try
+    {
+        string keyPath = type + "\\" + companyName + "\\" + softwareName;
+        RegistryKey rk = Registry.CurrentUser.OpenSubKey(keyPath, RegistryKeyPermissionCheck.ReadSubTree);
+        string rkValue = rk == null ? string.Empty : rk.GetValue("license") == null ? string.Empty : rk.GetValue("license").ToString();
+        if (rk != null) rk.Close();
+        exception = false;
+        if (rkValue != string.Empty)
         {
-            try
+            if (licenseType == LicenseType.Title)
             {
-                string keyPath = type + "\\" + companyName + "\\" + softwareName;
-                RegistryKey rk = Registry.CurrentUser.OpenSubKey(keyPath, RegistryKeyPermissionCheck.ReadSubTree);
-                string rkValue = rk == null ? string.Empty : rk.GetValue("license") == null ? string.Empty : rk.GetValue("license").ToString();
-                if (rk != null) rk.Close();
-                exception = false;
-                if (rkValue != string.Empty)
-                {
-                    if (licenseType == LicenseType.Title)
-                    {
-                        return CheckLicenseString(rkValue);
-                    }
-                    else
-                    {
-                        return (rkValue);
-                    }
-                }
+                return CheckLicenseString(rkValue);
             }
-            catch
+            else
             {
-                exception = true;
+                return (rkValue);
             }
-            return string.Empty;
         }
+    }
+    catch
+    {
+        exception = true;
+    }
+    return string.Empty;
+}
 
-        public void CreateLicenseKey(string license, out bool exception)
+public void CreateLicenseKey(string license, out bool exception)
+{
+    try
+    {
+        RegistryKey rk = Registry.CurrentUser.OpenSubKey(type, RegistryKeyPermissionCheck.ReadWriteSubTree);
+        if (rk.GetValue(companyName) == null)
         {
-            try
-            {
-                RegistryKey rk = Registry.CurrentUser.OpenSubKey(type, RegistryKeyPermissionCheck.ReadWriteSubTree);
-                if (rk.GetValue(companyName) == null)
-                {
-                    rk.CreateSubKey(companyName);
-                }
-                rk = rk.OpenSubKey(companyName, RegistryKeyPermissionCheck.ReadWriteSubTree);
-                if (rk.GetValue(softwareName) == null)
-                {
-                    rk.CreateSubKey(softwareName);
-                }
-                rk = rk.OpenSubKey(softwareName, RegistryKeyPermissionCheck.ReadWriteSubTree);
-                rk.SetValue("license", license);
-                rk.Close();
-                exception = false;
-            }
-            catch
-            {
-                exception = true;
-            }
+            rk.CreateSubKey(companyName);
         }
+        rk = rk.OpenSubKey(companyName, RegistryKeyPermissionCheck.ReadWriteSubTree);
+        if (rk.GetValue(softwareName) == null)
+        {
+            rk.CreateSubKey(softwareName);
+        }
+        rk = rk.OpenSubKey(softwareName, RegistryKeyPermissionCheck.ReadWriteSubTree);
+        rk.SetValue("license", license);
+        rk.Close();
+        exception = false;
+    }
+    catch
+    {
+        exception = true;
+    }
+}
 
-        public void DeleteLicenseKey(out bool exception)
-        {
-            try
-            {
-                string keyPath = type + "\\" + companyName + "\\" + softwareName;
-                RegistryKey rk = Registry.CurrentUser.OpenSubKey(keyPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
-                rk.DeleteValue("license");
-                rk.Close();
-                exception = false;
-            }
-            catch
-            {
-                exception = true;
-            }
-        }
+public void DeleteLicenseKey(out bool exception)
+{
+    try
+    {
+        string keyPath = type + "\\" + companyName + "\\" + softwareName;
+        RegistryKey rk = Registry.CurrentUser.OpenSubKey(keyPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+        rk.DeleteValue("license");
+        rk.Close();
+        exception = false;
+    }
+    catch
+    {
+        exception = true;
+    }
+}
     }
 }
