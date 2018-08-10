@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("PingTest Graph")]
-[assembly: AssemblyDescription("Minimalist yet effective ping test monitor")]
+[assembly: AssemblyDescription("lighweight and effective ping monitoring apps")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("www.indonesiamadjoe.com")]
 [assembly: AssemblyProduct("PingTest Graph")]

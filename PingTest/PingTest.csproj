@@ -23,6 +23,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <WebPage>publish.htm</WebPage>
+    <AutorunEnabled>true</AutorunEnabled>
     <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
@@ -48,12 +50,13 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>732E120A36D23D347E51685CE0CEF305F8A2B8EF</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>B0C42CCDA42A5CB692EF8F423354EF454459A31F</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>PingTest_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>cert-key-20180810-131208.p12</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -63,6 +66,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\logo_icon_complete.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -137,6 +143,7 @@
     <EmbeddedResource Include="Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="cert-key-20180810-131208.p12" />
     <None Include="ClassDiagram1.cd" />
     <None Include="PingTest_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
