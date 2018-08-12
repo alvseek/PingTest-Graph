@@ -108,7 +108,6 @@ namespace PingTest
             {
                 UIFunction uiFunction = new UIFunction();
                 uiFunction.MoveToDefault(this);
-                //belum di check bisa apa engga nya
             }
             else
             {
@@ -134,7 +133,10 @@ namespace PingTest
             if (licenseTitle == string.Empty)
             {
                 Donation donationForm = new Donation();
+                donationForm.TopMost = true;
                 donationForm.Show();
+                donationForm.Activate();
+                donationForm.TopMost = false;
             }
         }
 

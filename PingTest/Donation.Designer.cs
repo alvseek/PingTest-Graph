@@ -53,7 +53,7 @@
             this.label2.Size = new System.Drawing.Size(277, 94);
             this.label2.TabIndex = 1;
             this.label2.Text = "Small donation can even help! and it helps us to make another lovable product!\r\n\r" +
-    "\nYou can see about how to donate and donate from here:\r\n";
+    "\nYou can find out about donation and how to donate from:\r\n";
             // 
             // button1
             // 
@@ -68,7 +68,7 @@
             // linkLabel1
             // 
             this.linkLabel1.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel1.Location = new System.Drawing.Point(-1, 113);
+            this.linkLabel1.Location = new System.Drawing.Point(-1, 114);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(311, 23);
             this.linkLabel1.TabIndex = 3;
