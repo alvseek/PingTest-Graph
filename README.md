@@ -1,6 +1,6 @@
 # PingTest Graph
 
-A lightweight, always-on-top ping monitoring widget for Windows. See your network latency at a glance with a real-time color-coded graph overlay.
+A lightweight ping monitoring widget for Windows. See your network latency at a glance with a real-time color-coded graph overlay.
 
 ## Background
 
