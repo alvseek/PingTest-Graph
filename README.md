@@ -31,7 +31,7 @@ I released it for free with a donation option. It never got popular enough to re
 ## Requirements
 
 - **Windows** (tested on Windows 11, originally built on Windows 10)
-- **.NET Framework 4.5.2** or later (pre-installed on most Windows systems)
+- **.NET Framework 4.8** (pre-installed on Windows 10 version 1903 and later, and on all Windows 11)
 
 ## Building from Source
 
@@ -61,7 +61,7 @@ No NuGet packages or external dependencies required - everything uses built-in .
 
 ## Tech Stack
 
-- C# / .NET Framework 4.5.2
+- C# / .NET Framework 4.8
 - Windows Forms
 - System.Windows.Forms.DataVisualization (charting)
 - Win32 API interop for window transparency effects
