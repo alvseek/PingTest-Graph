@@ -68,4 +68,8 @@ No NuGet packages or external dependencies required - everything uses built-in .
 
 ## License
 
-Copyright 2018 - [www.indonesiamadjoe.com](http://www.indonesiamadjoe.com)
+Licensed under the Apache License, Version 2.0 - see [LICENSE](LICENSE) and [NOTICE](NOTICE).
+You are free to use, modify and redistribute it, including commercially, as long as the
+notice is kept.
+
+Copyright 2018 Alviandi Widiasto - [www.indonesiamadjoe.com](http://www.indonesiamadjoe.com)
